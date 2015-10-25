@@ -81,10 +81,13 @@ body {
 /*
  * Addresses `outline` inconsistency between Chrome and other browsers.
  */
-
+a {
+  text-decoration: none;
+}
 a:focus {
     outline: thin dotted;
 }
+
 
 /*
  * Improves readability when focused and also mouse hovered in all browsers.
@@ -372,4 +375,14 @@ textarea {
 table {
     border-collapse: collapse;
     border-spacing: 0;
+}
+
+/* ==========================================================================
+   Tables
+   ========================================================================== */
+/*
+ * 自定义的清除li的样式
+ */
+li {
+  list-style: none;
 }
