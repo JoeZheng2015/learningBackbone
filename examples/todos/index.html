@@ -48,7 +48,7 @@
   <script src="todos.js"></script>
 
   <!-- Templates -->
-
+  <!-- 以下这一块，是要插入到todo的li里的 -->
   <script type="text/template" id="item-template">
     <div class="view">
       <input class="toggle" type="checkbox" <%= done ? 'checked="checked"' : '' %> />
@@ -57,7 +57,7 @@
     </div>
     <input class="edit" type="text" value="<%- title %>" />
   </script>
-
+  <!-- 以下是统计item的 -->
   <script type="text/template" id="stats-template">
     <% if (done) { %>
       <a id="clear-completed">Clear <%= done %> completed <%= done == 1 ? 'item' : 'items' %></a>
