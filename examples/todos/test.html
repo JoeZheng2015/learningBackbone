@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>backbone的demo</title>
+</head>
+
+<body>
+
+<div></div>
+
+<script src="../../test/vendor/jquery.js"></script>
+<script src="../../test/vendor/underscore.js"></script>
+<script src="../../backbone.js"></script>
+
+<script>
+    var app;
+    var router = Backbone.Router.extend({
+        // routes属性的格式是'path/:param':'action'
+        // 实现但uri是filename#path/param时，触发router里定义的对应的action函数
+        routes: {
+            '': 'home'
+        },
+        initialize: function (){
+            // 一些在对象初始化的时候执行的代码
+        },
+        // 路由对应的home函数
+        home: function (){
+            // 创建homeView对象，并赋值给router的homeView属性
+            this.homeView = new homeView;
+            // 调用homeView的render方法
+            this.homeView.render();
+        }
+    });
+    // 定义渲染View的逻辑
+    var homeView = Backbone.View.extend({
+        // el是保存jquery选择器的字符串
+        el: 'body',
+        // _.template是underscore的函数
+        template: _.template('Hello World'),
+        // 渲染homeView，把_.template的运行结果插入$el中
+        render: function (){
+            this.$el.html(this.template({}));
+        }
+    });
+
+    $(function (){
+        app = new router;
+        // 启动对url的监听
+        Backbone.history.start();
+    });
+
+</script>
+</body>
+</html>
