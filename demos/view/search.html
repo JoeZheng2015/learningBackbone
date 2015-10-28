@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>搜索框</title>
+</head>
+<body>
+    <!-- type="text/template"这种错误代码让浏览器忽略这段代码，但通过$el.html()能获得这段模板 -->
+    <script type="text/template" id="search_template">
+        <label><%= search_label %></label>
+        <input type="text" id="search_input" />
+        <input type="button" id="search_button" value="Search" />
+    </script>
+
+    <div id="search_container"></div>
+    <script src="../../test/vendor/jquery.js"></script>
+    <script src="../../test/vendor/underscore.js"></script>
+    <script src="../../backbone.js"></script>
+    <script>
+    $(function() {
+        var SearchView = Backbone.View.extend({
+            initialize: function() {
+                this.render();
+            },
+            render: function() {
+                // 定义要传递给_.template的变量
+                var label = {
+                    search_label: 'My Search'
+                };
+                // 通过$el.html()获得模板的代码
+                // 把获得的代码传给_.template来编译
+                // 第二个参数为对象时，页面会立即呈现，而不是返回一个模板函数
+                var template = _.template($("#search_template").html(), label);
+                // 把编译后的代码传入容器el中
+                this.$el.html(template);
+            },
+            events: {
+                // 以'[事件类型] [事件元素]'：'事件处理程序'来定义事件
+                'click #search_button': 'doSearch'
+            },
+            doSearch: function(e) {
+                alert('有人点我？');
+            }
+        });
+        var search_view = new SearchView({
+            el: $("#search_container")
+        });
+    });
+    </script>
+</body>
+</html>
