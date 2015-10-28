@@ -11,8 +11,8 @@
         <input type="text" id="search_input" />
         <input type="button" id="search_button" value="Search" />
     </script>
-
     <div id="search_container"></div>
+
     <script src="../../test/vendor/jquery.js"></script>
     <script src="../../test/vendor/underscore.js"></script>
     <script src="../../backbone.js"></script>
@@ -27,19 +27,22 @@
                 var label = {
                     search_label: 'My Search'
                 };
-                // 通过$el.html()获得模板的代码
-                // 把获得的代码传给_.template来编译
-                // 第二个参数为对象时，页面会立即呈现，而不是返回一个模板函数
-                var template = _.template($("#search_template").html(), label);
+                // 通过$el.html()获得模板的代码,然后把获得的代码传给_.template来编译
+                // _.template()只有一个参数时，返回一个模板函数
+                // 有两个参数时，返回一个可显示的html模板
+                var template = _.template($("#search_template").html());
                 // 把编译后的代码传入容器el中
-                this.$el.html(template);
+                this.$el.html(template(label));
             },
             events: {
                 // 以'[事件类型] [事件元素]'：'事件处理程序'来定义事件
                 'click #search_button': 'doSearch'
             },
             doSearch: function(e) {
-                alert('有人点我？');
+                // this指向容器el，而不是事件的目标元素！因为虽然函数时View的方法，但是调用的时候是作为元素的方法被调用！
+                // 所以要通过e.srcElement || e.target？来获取当前目标？
+                var $el = $(e.srcElement || e.target);
+                alert('按钮名字是' + $el.val() + '；你正在搜索' + $("#search_input").val());
             }
         });
         var search_view = new SearchView({
