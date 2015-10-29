@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>学习Router</title>
+</head>
+<body>
+    <script src="../../test/vendor/jquery.js"></script>
+    <script src="../../test/vendor/underscore.js"></script>
+    <script src="../../backbone.js"></script>
+    <script>
+        $(function() {
+            var Human = Backbone.Model.extend({
+                defaults: {
+                    name: 'haha',
+                    age: 0
+                },
+                initialize: function(){
+                    // 这里是把model对象传进来
+                    this.on('change:name', function(model) {
+                        var name = model.get('name');
+                        alert('我的新名字是' + name);
+                    })
+                }
+            });
+
+            var human = new Human();
+            human.set({name: 'joe'});
+        });
+    </script>
+</body>
+</html>
