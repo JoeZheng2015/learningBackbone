@@ -26,6 +26,9 @@
 
             var human = new Human();
             human.set({name: 'joe'});
+            // var human = new Human({name: 'joe'});
+            // 也能在实例化的时候设置名字，但是应该是因为实例化所以没有触发initialize
+            // @todo Backbone也能通过id与后端交互，但是我暂时不会。。。
         });
     </script>
 </body>
