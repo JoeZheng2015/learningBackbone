@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>学习Router</title>
+</head>
+<body>
+    <script src="../../test/vendor/jquery.js"></script>
+    <script src="../../test/vendor/underscore.js"></script>
+    <script src="../../backbone.js"></script>
+    <script>
+        $(function() {
+            var AppRouter = Backbone.Router.extend({
+                routes: {
+                    // 路由会先匹配定义在前面的
+                    'post/:id': 'getPost',
+                    'get/:name/:age': 'info',
+                    // 匹配#后面跟着任何东西
+                    '*actions': 'defaultRoute'
+                }
+            });
+            var app_router = new AppRouter;
+
+            app_router.on('route:getPost', function(id) {
+                alert('你post的id是' + id);
+            });
+            app_router.on('route:info', function(name, age) {
+                alert(name + '你' + age + '岁啦！');
+            });
+            app_router.on('route:defaultRoute', function(actions) {
+                alert(actions);
+            });
+
+            // 启动路由必须要Backbone.history,start()监听URL
+            Backbone.history.start();
+        });
+    </script>
+</body>
+</html>
