@@ -18,14 +18,14 @@
     <script src="../../backbone.js"></script>
     <script>
     $(function() {
-        var SearchView = Backbone.View.extend({
+        var App = Backbone.View.extend({
             initialize: function() {
                 this.render();
             },
             render: function() {
                 // 定义要传递给_.template的变量
                 var label = {
-                    search_label: 'My Search'
+                    search_label: '搜索框'
                 };
                 // 通过$el.html()获得模板的代码,然后把获得的代码传给_.template来编译
                 // _.template()只有一个参数时，返回一个模板函数
@@ -45,7 +45,7 @@
                 alert('你正在搜索：' + $("#search_input").val());
             }
         });
-        var search_view = new SearchView({
+        var app = new App({
             el: $("#search_container")
         });
     });
