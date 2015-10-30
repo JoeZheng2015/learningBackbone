@@ -31,7 +31,8 @@
                     $el.on('keyup', function(e) {
                         that.set('word', $el.val());
                     });
-                    // 为echo绑定word属性的change事件，每次word改变时，对应的改变显示的值，实现单向数据绑定
+                    // 当Echo模型的word属性被更新时被触发
+                    // API为'change: [attribute]' (model, value, options)
                     that.on('change:word', function(model, word) {
                         $('.type').text(word);
                     });

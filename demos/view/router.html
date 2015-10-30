@@ -20,8 +20,8 @@
                 }
             });
             var app_router = new AppRouter;
-            // 以冒号:作为命名空间
-            // 但是这里应该是把事件绑定到route上，然后route下的事件命作为命名空间
+            // 当路由匹配时，通过路由触发
+            // API为'route:name' (params)
             app_router.on('route:getPost', function(id) {
                 alert('你post的id是' + id);
             });
