@@ -14,9 +14,6 @@
                 defaluts: {
                     name: '名字',
                     artist: '艺术家'
-                },
-                initialize: function() {
-                    console.log('初始化一个Song');
                 }
             });
             var Album = Backbone.Collection.extend({
@@ -25,7 +22,7 @@
             var song1 = new Song({name: 'Morning', artist: '卫兰'});
             var song2 = new Song({name: '陪安东尼的日志', artist: '陈奕迅'});
             var myAlbum = new Album([song1, song2]);
-            console.log(myAlbum.models); // [song1, song2]
+            console.log(myAlbum.models[0].get('name')); // 'morning'
         });
     </script>
 </body>
