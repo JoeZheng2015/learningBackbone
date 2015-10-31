@@ -10,30 +10,26 @@
     <script src="../../backbone.js"></script>
     <script>
         $(function() {
-            var AppRouter = Backbone.Router.extend({
-                routes: {
-                    // 路由会先匹配定义在前面的
-                    'post/:id': 'getPost',
-                    // 匹配get，并把后面两个斜杠接着的参数传给对应的Info函数
-                    'get/:name/:age': 'info',
-                    '*actions': 'defaultRoute'
-                }
-            });
-            var app_router = new AppRouter;
-            // 当路由匹配时，通过路由触发
-            // API为'route:name' (params)
-            app_router.on('route:getPost', function(id) {
-                alert('你post的id是' + id);
-            });
-            app_router.on('route:info', function(name, age) {
-                alert(name + '你' + age + '岁啦！');
-            });
-            app_router.on('route:defaultRoute', function(actions) {
-                alert(actions);
-            });
+var App = Backbone.Router.extend({
+    // 定义路由、动作的键值对
+    // *表示通配，会匹配多个url组件
+    routes: {
+        // http://joezheng2015.github.io/learningBackbone/demos/view/router.html#post/120
+        'post/:id': 'doPost', // 注意*会匹配所有url，所以应该放在最后面
+        '*actions': 'defaultRoute' // 匹配所有含#的url，并把#后面作为动作
+    },
+    defaultRoute: function(actions) {
+        alert(actions);
+    },
+    doPost: function(id) {
+        alert('你post了：' + id); // 120
+    }
+});
+var app = new App();
 
-            // 启动路由必须要Backbone.history,start()监听URL
-            Backbone.history.start();
+// 需要调用该方法来初始化URL路由
+Backbone.history.start();
+
         });
     </script>
 </body>
