@@ -5,24 +5,51 @@
     <title>学习BB的Collection模块</title>
 </head>
 <body>
+        <ul class="list">
+        </ul>
+    <script type="text/template" class="template">
+        <li>排名第<%= rank %>的是：<%= name%></li>
+    </script>
     <script src="../../test/vendor/jquery.js"></script>
     <script src="../../test/vendor/underscore.js"></script>
     <script src="../../backbone.js"></script>
     <script>
         $(function() {
-            var Song = Backbone.Model.extend({
+            var Book = Backbone.Model.extend({
                 defaluts: {
                     name: '名字',
-                    artist: '艺术家'
+                    rank: '排名',
+                    price: '价格'
                 }
             });
-            var Album = Backbone.Collection.extend({
-                model: Song
+            var Books = Backbone.Collection.extend({
+                model: Book,
+                comparator: 'rank'
             });
-            var song1 = new Song({name: 'Morning', artist: '卫兰'});
-            var song2 = new Song({name: '陪安东尼的日志', artist: '陈奕迅'});
-            var myAlbum = new Album([song1, song2]);
-            console.log(myAlbum.models[0].get('name')); // 'morning'
+            var book1 = new Book({name: '高程', rank: 2, price: 10});
+            var book2 = new Book({name: '权威', rank: 1, price: 20});
+            var book3 = new Book({name: '精粹', rank: 3, price: 5});
+
+            var books = new Books([book1, book2, book3]);
+            var View = Backbone.View.extend({
+                el: $('.list'),
+                collection: books,
+                initialize: function() {
+                    this.render();
+                },
+                render: function() {
+                    var template = _.template($('.template').html()),
+                        html = '';
+                    this.collection.forEach(function(item, index, list) {
+                        html += template({
+                            rank: item.get('rank'),
+                            name: item.get('name')
+                        });
+                    });
+                    this.$el.html(html);
+                }
+            });
+            var view = new View();
         });
     </script>
 </body>

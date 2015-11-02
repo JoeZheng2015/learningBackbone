@@ -10,25 +10,25 @@
     <script src="../../backbone.js"></script>
     <script>
         $(function() {
-var App = Backbone.Router.extend({
-    // 定义路由、动作的键值对
-    // *表示通配，会匹配多个url组件
-    routes: {
-        // http://joezheng2015.github.io/learningBackbone/demos/view/router.html#post/120
-        'post/:id': 'doPost', // 注意*会匹配所有url，所以应该放在最后面
-        '*actions': 'defaultRoute' // 匹配所有含#的url，并把#后面作为动作
-    },
-    defaultRoute: function(actions) {
-        alert(actions);
-    },
-    doPost: function(id) {
-        alert('你post了：' + id); // 120
-    }
-});
-var app = new App();
+            var App = Backbone.Router.extend({
+                // 定义路由、动作的键值对
+                // *表示通配，会匹配多个url组件
+                routes: {
+                    // http://joezheng2015.github.io/learningBackbone/demos/view/router.html#post/120
+                    'post/:id': 'doPost', // 注意*会匹配所有url，所以应该放在最后面
+                    '*actions': 'defaultRoute' // 匹配所有含#的url，并把#后面作为动作
+                },
+                defaultRoute: function(actions) {
+                    alert(actions);
+                },
+                doPost: function(id) {
+                    alert('你post了：' + id); // 120
+                }
+            });
+            var app = new App();
 
-// 需要调用该方法来初始化URL路由
-Backbone.history.start();
+            // 需要调用该方法来初始化URL路由
+            Backbone.history.start();
 
         });
     </script>

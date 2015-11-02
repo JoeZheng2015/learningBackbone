@@ -164,7 +164,8 @@ $(function(){
 
       this.input = this.$("#new-todo");
       this.allCheckbox = this.$("#toggle-all")[0];
-
+      // 让一个对象监听另一个对象上的事件
+      // object.listenTo(other, event, callback)
       this.listenTo(Todos, 'add', this.addOne);
       this.listenTo(Todos, 'reset', this.addAll);
       this.listenTo(Todos, 'all', this.render);
