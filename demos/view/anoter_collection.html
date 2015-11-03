@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>学习BB的Collection模块</title>
+    <title>Collection里包含View</title>
 </head>
 <body>
         <ul class="list">
@@ -29,25 +29,22 @@
             var book1 = new Book({name: '高程', rank: 2, price: 10});
             var book2 = new Book({name: '权威', rank: 1, price: 20});
             var book3 = new Book({name: '精粹', rank: 3, price: 5});
-
             var books = new Books([book1, book2, book3]);
+
             var View = Backbone.View.extend({
                 el: $('.list'),
-                collection: books,
                 initialize: function() {
-                    this.render();
+                    this.addAll();
                 },
-                render: function() {
+                addOne: function(book) {
                     var template = _.template($('.template').html());
-                    // Collection里有underScore对应的方法，更便利
-                    this.collection.each(function(book) {
-                        // Model.toJSON()返回的是浅拷贝的对象，而不是JSON
-                        // 用toJSON()能直接传入对象，更方便
-                        this.$el.append(template(book.toJSON()));
-                    }, this);
+                    this.$el.append(template(book.toJSON()));
+                },
+                addAll: function() {
+                    this.collection.each(this.addOne, this);
                 }
             });
-            var view = new View();
+            var view = new View({collection: books});
         });
     </script>
 </body>
