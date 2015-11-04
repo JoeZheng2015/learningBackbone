@@ -24,6 +24,7 @@
             });
             var Books = Backbone.Collection.extend({
                 model: Book,
+                // comparator为对象属性，就会根据该属性为model排序
                 comparator: 'rank'
             });
             var book1 = new Book({name: '高程', rank: 2, price: 10});
