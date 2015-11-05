@@ -32,7 +32,11 @@ $(function() {
 		el: $('#todoapp'),
 		statsTemplate: _.template($('#stats-template').html()),
 		initialize: function() {
+			this.listenTo(Todos, 'all', this.render);
 			this.addAll();
+		},
+		render: function() {
+			console.log('1');
 		},
 		addOne: function(todo) {
 			var view = new TodoView({model: todo});
