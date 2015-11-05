@@ -5,10 +5,12 @@
   <meta charset="utf-8">
   <title>Backbone.js Todos</title>
   <link rel="stylesheet" href="../css/todo.css"/>
+  <style>
+    #main {display: block;}
+  </style>
 </head>
 
 <body>
-
   <div id="todoapp">
     <header>
         <h1>Todos</h1>
@@ -51,9 +53,6 @@
           <a id="clear-completed">Clear <%= done %> completed <%= done == 1 ? 'item' : 'items' %></a>
         <% } %>
         <div class="todo-count"><b><%= remaining %></b> <%= remaining == 1 ? 'item' : 'items' %> left</div>
-        </script>
-        <script>
-            
         </script>
     </body>
 </html>
