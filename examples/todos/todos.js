@@ -211,7 +211,7 @@ $(function(){
     createOnEnter: function(e) {
       if (e.keyCode != 13) return;
       if (!this.input.val()) return;
-
+      // 使用create生成的model，没有定义的属性，会继承model的默认属性。所以这个done默认为false
       Todos.create({title: this.input.val()});
       this.input.val('');
     },
