@@ -34,13 +34,15 @@
             var books = new Books([book1, book2, book3]);
             var View = Backbone.View.extend({
                 el: $('.list'),
+                // 在collection属性中指定集合的实例books，注意是实例不是类
                 collection: books,
                 initialize: function() {
                     this.render();
                 },
                 render: function() {
                     var template = _.template($('.template').html());
-                    // Collection里有underScore对应的方法，更便利
+                    // Collection里的underScore对应的方法，更便利
+                    // 用each遍历Collection中的model
                     this.collection.each(function(book) {
                         // Model.toJSON()返回的是浅拷贝的对象，而不是JSON
                         // 用toJSON()能直接传入对象，更方便
