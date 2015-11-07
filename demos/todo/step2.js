@@ -8,8 +8,9 @@ $(function() {
 	});
 
 	var TodoList = Backbone.Collection.extend({
-		// 用模型类覆盖！
-		model: Todo
+		model: Todo,
+		localStorage: new Backbone.LocalStorage("todos-backbone"),
+
 	});
 	var todolist = new TodoList();
 
@@ -32,15 +33,16 @@ $(function() {
 			// add事件的API为：'add'(model, collectoin, options)
 			// 所以会自动把model实例传进方法里
 			this.listenTo(this.collection, 'add', this.addOne);
+			// 自动从数据库拉取模型，然后使用set方法
+			// set方法触发集合的add事件，调用addOne方法，所以内容被加载
+			this.collection.fetch();
 		},
 		create: function(e) {
 			if (e.keyCode != 13 || !this.input.val()) {
 				return false;
 			}
-			this.collection.add({
-				title: this.input.val(),
-				// 没有使用create方法，需要自己设置done属性
-				done: false
+			this.collection.create({
+				title: this.input.val()
 			});
 			this.input.val('');
 		},

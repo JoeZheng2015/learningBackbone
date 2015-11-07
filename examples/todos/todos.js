@@ -213,6 +213,7 @@ $(function(){
       if (!this.input.val()) return;
       // 使用create生成的model，没有定义的属性，会继承model的默认属性。所以这个done默认为false
       Todos.create({title: this.input.val()});
+      debugger;
       this.input.val('');
     },
 
