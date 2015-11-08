@@ -4,11 +4,16 @@ $(function() {
 		defaults: {
 			title: 'todo项的标题',
 			done: false
+		},
+		toggle: function () {
+			// 如果只是单纯的用set方法，只会在本地起效
+			// 使用save则会保存到数据库，然后触发'change'事件
+			// 所以我们可以在change事件中定义本地的改变
+			this.save({done: !this.get('done')});
 		}
 	});
 
 	var TodoList = Backbone.Collection.extend({
-		// 用模型类覆盖！
 		model: Todo,
 		localStorage: new Backbone.LocalStorage("todos-backbone"),
 		getDone: function() {
@@ -23,20 +28,29 @@ $(function() {
 	var TodoView = Backbone.View.extend({
 		tagName: 'li',
 		template: _.template($('#item-template').html()),
+		events: {
+			'click .toggle': 'toggleDone'
+		},
 		render: function() {
 			this.$el.html(this.template(this.model.toJSON()));
 			return this;
+		},
+		toggleDone: function() {
+			// 因为在实例化app的时候，已经把todo传进来作为这个view的model
+			this.model.toggle();
 		}
 	});
 
 	var AppView = Backbone.View.extend({
 		el: $('#todoapp'),
-		statsTemplate: _.template($('#stats-template').html()),
+	    statsTemplate: _.template($('#stats-template').html()),
 		events: {
-			'keypress #new-todo': 'create'
+			'keypress #new-todo': 'create',
+			'click #toggle-all': 'toggleAll'
 		},
 		initialize: function () {
 			this.input = $('#new-todo');
+			this.allCheckbox = this.$("#toggle-all")[0];
 			// add事件的API为：'add'(model, collectoin, options)
 			// 所以会自动把model实例传进方法里
 			this.listenTo(this.collection, 'add', this.addOne);
@@ -50,7 +64,6 @@ $(function() {
 			this.collection.fetch();
 		},
 		render: function () {
-			// 调用集合方法，获得当前已完成和未完成todo项的数量
 			var done = this.collection.getDone().length;
 			var remaining = this.collection.getRemaining().length;
 
@@ -66,15 +79,15 @@ $(function() {
 				this.main.hide();
 				this.footer.hide();
 			}
+
+			this.allCheckbox.checked = !remaining;
 		},
 		create: function(e) {
 			if (e.keyCode != 13 || !this.input.val()) {
 				return false;
 			}
-			this.collection.add({
-				title: this.input.val(),
-				// 没有使用create方法，需要自己设置done属性
-				done: false
+			this.collection.create({
+				title: this.input.val()
 			});
 			this.input.val('');
 		},
@@ -82,6 +95,16 @@ $(function() {
 			var view = new TodoView({model: todo});
 			// 这里取$el和el都可以，只是append是jquery对象或htmlElement对象的区别
 			$("#todo-list").append(view.render().el);
+		},
+		toggleAll: function() {
+			// 获取点击全选之后的按钮的状态
+			// 所有li的按钮也同步
+			var done = this.allCheckbox.checked;
+			this.collection.each(function (todo) {
+				todo.save({
+					done: done
+				});
+			});
 		}
 	});
 	var app = new AppView({collection: todolist});
