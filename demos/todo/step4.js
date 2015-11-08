@@ -30,7 +30,9 @@ $(function() {
 		template: _.template($('#item-template').html()),
 		events: {
 			'click .toggle': 'toggleDone',
-			'click a.destroy': 'clear'
+			'click a.destroy': 'clear',
+			'dblclick .view': 'edit',
+			"blur .edit"      : "close"
 		},
 		initialize: function() {
 			this.listenTo(this.model, 'change', this.render);
@@ -39,6 +41,7 @@ $(function() {
 		},
 		render: function() {
 			this.$el.html(this.template(this.model.toJSON()));
+			this.input = this.$('.edit');
 			return this;
 		},
 		toggleDone: function() {
@@ -47,6 +50,21 @@ $(function() {
 		},
 		clear: function() {
 			this.model.destroy();
+		},
+		edit: function() {
+			this.$el.addClass("editing");
+		},
+		close: function() {
+			// 生成html后，绑定this.input就能存储每个view下的input
+			var value = this.input.val();
+			if (!value) {
+				this.clear();
+			}
+			else {
+				// 使用save在更新model
+				this.model.save({title: value});
+				this.$el.removeClass('editing');
+			}
 		}
 	});
 
