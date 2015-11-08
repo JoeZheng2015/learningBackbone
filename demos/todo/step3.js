@@ -29,7 +29,12 @@ $(function() {
 		tagName: 'li',
 		template: _.template($('#item-template').html()),
 		events: {
-			'click .toggle': 'toggleDone'
+			'click .toggle': 'toggleDone',
+			'click a.destroy': 'clear'
+		},
+		initialize: function() {
+			// 但model触发destory事件时，调用视图的remove方法，从DOM中移除对应视图
+			this.listenTo(this.model, 'destroy', this.remove);
 		},
 		render: function() {
 			this.$el.html(this.template(this.model.toJSON()));
@@ -38,6 +43,9 @@ $(function() {
 		toggleDone: function() {
 			// 因为在实例化app的时候，已经把todo传进来作为这个view的model
 			this.model.toggle();
+		},
+		clear: function() {
+			this.model.destroy();
 		}
 	});
 
@@ -46,7 +54,8 @@ $(function() {
 	    statsTemplate: _.template($('#stats-template').html()),
 		events: {
 			'keypress #new-todo': 'create',
-			'click #toggle-all': 'toggleAll'
+			'click #toggle-all': 'toggleAll',
+			'click #clear-completed': 'clear'
 		},
 		initialize: function () {
 			this.input = $('#new-todo');
@@ -79,7 +88,6 @@ $(function() {
 				this.main.hide();
 				this.footer.hide();
 			}
-
 			this.allCheckbox.checked = !remaining;
 		},
 		create: function(e) {
@@ -96,7 +104,7 @@ $(function() {
 			// 这里取$el和el都可以，只是append是jquery对象或htmlElement对象的区别
 			$("#todo-list").append(view.render().el);
 		},
-		toggleAll: function() {
+		toggleAll: function () {
 			// 获取点击全选之后的按钮的状态
 			// 所有li的按钮也同步
 			var done = this.allCheckbox.checked;
@@ -105,6 +113,12 @@ $(function() {
 					done: done
 				});
 			});
+		},
+		clear: function () {
+			var done = this.collection.getDone();
+			// 调用model上的destroy方法，通过detele删除数据库上的模型，并触发model上的destroy事件
+			_.invoke(done, 'destroy');
+			return false;
 		}
 	});
 	var app = new AppView({collection: todolist});
