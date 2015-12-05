@@ -8,12 +8,20 @@ $(function() {
 	var TodoView = Backbone.View.extend({
 		tagName: 'li',
 		template: _.template($('#item-template').html()),
+		events: {
+			'click .destroy': 'destroy'
+		},
 		initialize: function() {
 			this.render();
+
+			this.listenTo(this.model, 'destroy', this.remove);
 		},
 		render: function() {
 			this.$el.html(this.template(this.model.toJSON()));
 			return this;
+		},
+		destroy: function() {
+			this.model.destroy();
 		}
 	});
 
@@ -24,7 +32,7 @@ $(function() {
 	todos = new Todos();
 
 	var AppView = Backbone.View.extend({
-		collection: Todos,
+		collection: todos,
 		el: '.todoapp',
 		events: {
 			'keypress .new-todo': 'createOnEnter'
@@ -33,12 +41,16 @@ $(function() {
 			this.$input = $('.new-todo');
 			this.$list = $('.todo-list');
 
-			this.listenTo(todos, 'add', this.addOne);
+			this.listenTo(this.collection, 'add', this.addOne);
+			this.listenTo(this.collection, 'reset', this.addAll);
+
+			this.collection.fetch();
 		},
 		createOnEnter: function(e) {
-			if (e.keyCode === 13 && this.$input.val()) {
-				todos.create({
-					title: this.$input.val()
+			var text = this.$input.val();
+			if (e.keyCode === 13 && text) {
+				this.collection.create({
+					title: text
 				});
 				this.$input.val('');
 			}
@@ -46,6 +58,9 @@ $(function() {
 		addOne: function(model, collection, options) {
 			var todoView = new TodoView({model: model});
 			this.$list.append(todoView.$el);
+		},
+		addAll: function(collection, options) {
+			collection.each(this.addOne, this);
 		}
 	});
 	var app = new AppView();
