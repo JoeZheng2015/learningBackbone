@@ -1,4 +1,5 @@
 $(function() {
+    var state = {};
     var Todo = Backbone.Model.extend({
         // 这里不定义也可以，不过以后和Collection的create方法配合的话，需要默认的属性
         defaults: {
@@ -38,6 +39,13 @@ $(function() {
             this.listenTo(this.model, 'change', this.render);
             // 但model触发destory事件时，调用视图的remove方法，从DOM中移除对应视图
             this.listenTo(this.model, 'destroy', this.remove);
+            this.listenTo(this.model, 'visible', this.toggleVisible);
+        },
+        toggleVisible: function() {
+            this.$el.toggleClass('hidden', this.isHidden());
+        },
+        isHidden: function() {
+            return this.model.get('done') ? state === 'active' : state === 'completed';
         },
         render: function() {
             this.$el.html(this.template(this.model.toJSON()));
@@ -84,6 +92,7 @@ $(function() {
             // 所以会自动把model实例传进方法里
             this.listenTo(this.collection, 'add', this.addOne);
             this.listenTo(this.collection, 'all', this.render);
+            this.listenTo(this.collection, 'filter', this.filterAll);
 
             this.footer = this.$('footer');
             this.main = $('#main');
@@ -91,6 +100,12 @@ $(function() {
             // 自动从数据库拉取模型，然后使用set方法
             // set方法触发集合的add事件，调用addOne方法，所以内容被加载
             this.collection.fetch();
+        },
+        filterAll: function() {
+            this.collection.each(this.filterOne, this);
+        },
+        filterOne: function(todo) {
+            todo.trigger('visible');
         },
         render: function () {
             var done = this.collection.getDone().length;
@@ -141,5 +156,16 @@ $(function() {
             return false;
         }
     });
+    var Router = Backbone.Router.extend({
+        routes: {
+            '*filter': 'setFilter'
+        },
+        setFilter: function(param) {
+            state = param || '';
+            todolist.trigger('filter');
+        }
+    });
+    var router = new Router();
+    Backbone.history.start();
     var app = new AppView({collection: todolist});
 });

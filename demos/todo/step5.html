@@ -49,6 +49,17 @@
         <% if (done) { %>
           <a id="clear-completed">Clear <%= done %> completed <%= done == 1 ? 'item' : 'items' %></a>
         <% } %>
+        <ul class="filters">
+            <li>
+                <a class="selected" href="#">All</a>
+            </li>
+            <li>
+                <a href="#active">Active</a>
+            </li>
+            <li>
+                <a href="#completed">Completed</a>
+            </li>
+        </ul>
         <div class="todo-count"><b><%= remaining %></b> <%= remaining == 1 ? 'item' : 'items' %> left</div>
         </script>
     </body>
