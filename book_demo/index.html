@@ -19,6 +19,11 @@
             </section>
             <footer class="footer"></footer>
         </section>
+        <footer class="info">
+            <p>Double-click to edit a todo</p>
+            <p>Written by <a href="https://github.com/addyosmani">Addy Osmani</a></p>
+            <p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
+        </footer>
         <script type="text/template" id="item-template">
             <div class="view">
                 <input class="toggle" type="checkbox" <%= completed ? 'checked' : '' %>>
@@ -31,13 +36,13 @@
             <span class="todo-count"><strong><%= remaining %></strong> <%= remaining === 1 ? 'item' : 'items' %> left</span>
             <ul class="filters">
                 <li>
-                    <a class="selected" href="#/">All</a>
+                    <a class="selected" href="#">All</a>
                 </li>
                 <li>
-                    <a href="#/active">Active</a>
+                    <a href="#active">Active</a>
                 </li>
                 <li>
-                    <a href="#/completed">Completed</a>
+                    <a href="#completed">Completed</a>
                 </li>
             </ul>
             <% if (completed) { %>
